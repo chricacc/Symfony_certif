@@ -6,7 +6,7 @@
     <title>Bienvenue sur ma première page avec OpenClassrooms !</title>
   </head>
   <body>
-    <h1>Affichage d'une annonce</h1>
+    <h1>{{advert.title}}</h1>
 
     <p>
       {# On affiche tous les messages flash dont le nom est « info » #}
@@ -15,9 +15,45 @@
       {% endfor %}
     </p>
 
+    {# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
+
+    {# On vérifie qu'une image soit bien associée à l'annonce #}
+    {% if advert.image is not null %}
+      <img src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
+    {% endif %}
+
     <p>
-      Ici nous pourrons lire l'annonce ayant comme id : {{ id }}<br />
-      Mais pour l'instant, nous ne savons pas encore le faire, cela viendra !
+      {{advert.content}}
     </p>
+
+    {# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
+
+
+    {% if listAdvertSkills|length > 0 %}
+      <div>
+        Cette annonce requiert les compétences suivantes :
+        <ul>
+          {% for advertSkill in listAdvertSkills %}
+            <li>{{ advertSkill.skill.name }} : niveau {{ advertSkill.level }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% for application in listApplications %}
+        <h3>{{application.author}}</h3>
+        <p>{{application.content}} </p>
+    {% endfor %}
+
+    {# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
+
+    {% if not advert.categories.empty %}
+      <p>
+        Cette annonce est parue dans les catégories suivantes :
+        {% for category in advert.categories %}
+          {{ category.name }}{% if not loop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+    {% endif %}
   </body>
 </html>

@@ -1,0 +1,32 @@
+{# src/OC/PlatformBundle/Resources/view/Advert/view.html.twig #}
+{% extends 'OCCoreBundle::base.html.twig' %}
+
+{% block title %}
+    Bienvenue!
+{% endblock %}
+
+
+{% block body %}
+
+	<h1>Hello {{ name }}!</h1>
+
+	Les 3 dernières annonces sont :
+	<ul>
+	{% for ad in advertList %}
+	    <li>{{ad.id}}) {{ad.title}}</li>
+	{% endfor %}
+	</ul>
+{% endblock %}
+
+{% block errors %}
+	{% set errorsList = app.session.flashbag.get('errors') %}
+	{% if errorsList is not empty %}
+        <div class="jumbotron">
+        	<div class="container">
+	            {% for message in errorsList %}
+	               <p>{{ message }}</p> 
+	            {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

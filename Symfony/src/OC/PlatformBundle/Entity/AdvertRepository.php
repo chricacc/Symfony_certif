@@ -21,4 +21,12 @@ class AdvertRepository extends EntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function getLastNAdverts($n){
+    	$qb = $this->createQueryBuilder('ad');
+
+    	$qb->orderBy('ad.date', 'DESC')->setMaxResults($n);
+
+    	return $qb->getQuery()->getResult();
+    }
 }

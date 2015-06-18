@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class ApplicationRepository extends EntityRepository
 {
 	public function getApplicationsWithAdvert($limit){
-		$qb = this->createQueryBuilder('app');
+		$qb =$this->createQueryBuilder('app');
 
 		$qb->join('app.advert','ad')->addSelect('ad');
 

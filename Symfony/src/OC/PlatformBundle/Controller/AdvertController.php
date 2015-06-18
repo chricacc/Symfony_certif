@@ -24,10 +24,16 @@ class AdvertController extends Controller
       throw new NotFoundHttpException('Page "'.$page.'" inexistante.');
     }
 
-    // Ici, on récupérera la liste des annonces, puis on la passera au template
+    $em = $this->getDoctrine()->getManager();
+    // On récupère le repository
+    $repository = $em->getRepository('OCPlatformBundle:Advert');
+
+    $advertList = $repository->findAll();
 
     // Mais pour l'instant, on ne fait qu'appeler le template
-    return $this->render('OCPlatformBundle:Advert:index.html.twig');
+    return $this->render('OCPlatformBundle:Advert:index.html.twig', array(
+      'page' => $page,
+      'advertList' => $advertList));
   }
 
   public function viewAction($id)
@@ -61,11 +67,6 @@ class AdvertController extends Controller
       'advert'           => $advert,
       'listApplications' => $listApplications,
       'listAdvertSkills' => $listAdvertSkills
-    ));
-
-    return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
-      'advert'           => $advert,
-      'listApplications' => $listApplications
     ));
 
   }

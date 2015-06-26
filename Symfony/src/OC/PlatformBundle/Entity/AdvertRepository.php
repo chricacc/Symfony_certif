@@ -1,8 +1,8 @@
 <?php
-
 namespace OC\PlatformBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * AdvertRepository
@@ -12,21 +12,51 @@ use Doctrine\ORM\EntityRepository;
  */
 class AdvertRepository extends EntityRepository
 {
-	public function getAdvertWithCategories(array $categoryNames){
+    public function getAdvertWithCategories(array $categoryNames) {
         $qb = $this->createQueryBuilder('a');
-
+        
         $qb->join('a.categories', 'c')->addSelect('c');
-
         $qb->where($qb->expr()->in('c.name', $categoryNames));
-
+        
         return $qb->getQuery()->getResult();
     }
+    
+    public function getLastNAdverts($n) {
+        $qb = $this->createQueryBuilder('ad');
+        
+        $qb->orderBy('ad.date', 'DESC')->setMaxResults($n);
+        
+        return $qb->getQuery()->getResult();
+    }
+    
+    public function getAdverts($page, $nbPerPage)
+    {
+        $query = $this->createQueryBuilder('a')
+          ->leftJoin('a.image', 'img')->addSelect('img')
+          ->leftJoin('a.categories', 'c')->addSelect('c')
+          ->orderBy('a.date', 'DESC')
+          ->getQuery()
+        ;
 
-    public function getLastNAdverts($n){
-    	$qb = $this->createQueryBuilder('ad');
+        $query
+          ->setFirstResult(($page-1) * $nbPerPage)
+          ->setMaxResults($nbPerPage)
+        ;
 
-    	$qb->orderBy('ad.date', 'DESC')->setMaxResults($n);
+        // Enfin, on retourne l'objet Paginator correspondant à la requête construite
+        return new Paginator($query, true);
+    }
 
-    	return $qb->getQuery()->getResult();
+    public function getOutdatedAdverts($days){
+        $qb = $this->createQueryBuilder('ad');
+        $qb = $qb->where(
+                // la date doit être antérieure ou égale à date du jour - <days> jours
+                $qb->expr()->lte("ad.date", "DATE_SUB(:current_date, :days, 'day')"))
+              // et la liste de candidatures doit être vide.
+              ->andWhere("ad.applications is empty")
+              ->setParameter('current_date', new \DateTime())
+              ->setParameter('days', $days);
+
+        return $qb->getQuery()->getResult();
     }
 }

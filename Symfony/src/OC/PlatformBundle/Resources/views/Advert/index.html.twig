@@ -21,7 +21,26 @@
         {% endfor %}
     </ul>
 
-    <p>
-        Vous êtes à la page {{page}}
-    </p>
+    {% if outdatedAdverts != null %}
+        <h1>Annonces périmées:</h1>
+        <ul>
+            {% for ad in outdatedAdverts %}
+                <li>
+                    <a href="{{ path('oc_platform_view', { 'id': ad.id }) }}">
+                        Lien vers l'annonce d'id {{ ad.id }}
+                    </a>        
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <ul class="pagination"> 
+        {% for page in 1..nbPages %}
+            <li  {% if page == currentPage %} class="active" {% endif %}>
+                <a href="{{ path('oc_platform_home', { 'page': page }) }}">
+                    {{page}}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
 {% endblock %}

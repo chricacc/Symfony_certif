@@ -1,5 +1,100 @@
-<html>
-<body>
+{# src/OC/PlatformBundle/Resources/views/Advert/form.html.twig #}
 
-</body>
-</html>
+{% extends 'OCCoreBundle::base.html.twig' %}
+
+{% block title %}
+    Ajouter une annonce
+{% endblock %}
+
+
+
+{% block body %}
+
+	<h3>Formulaire d'annonce</h3>
+
+	<div class="well">
+	{{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+
+	{{ form_errors(form) }}
+
+	<div class="form-group">
+	  {{ form_label(form.title, "Titre de l'annonce", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+
+	  {{ form_errors(form.title) }}
+
+	  <div class="col-sm-4">
+	    {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+	  </div>
+	</div>
+
+	<div class="form-group">
+	  {{ form_label(form.content, "Contenu de l'annonce", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	  {{ form_errors(form.content) }}
+	  <div class="col-sm-4">
+	    {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
+	  </div>
+	</div>
+
+	<div class="form-group">
+	  {{ form_label(form.date, "Date de l'annonce", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	  {{ form_errors(form.date) }}
+	  <div class="col-sm-4">
+	    {{ form_widget(form.date, {'attr': {'class': 'form-control'}}) }}
+	  </div>
+	</div>
+
+	<div class="form-group">
+	  {{ form_label(form.author, "Auteur", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	  {{ form_errors(form.author) }}
+	  <div class="col-sm-4">
+	    {{ form_widget(form.author, {'attr': {'class': 'form-control'}}) }}
+	  </div>
+	</div>
+
+
+	
+
+	<div class="form-group">
+	  {{ form_label(form.image.url, "URL de l'image", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	  {{ form_errors(form.image.url) }}
+	  <div class="col-sm-4">
+	    {{ form_widget(form.image.url) }}
+	  </div>
+	</div>
+
+	<div class="form-group">
+	  {{ form_label(form.image.alt, "Texte de l'image", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	  {{ form_errors(form.image.alt) }}
+	  <div class="col-sm-4">
+	    {{ form_widget(form.image.alt) }}
+	  </div>
+	</div>
+
+	<div class="form-group">
+	  {{ form_label(form.categories, "Catégories", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	  {{ form_errors(form.categories) }}
+	  <div class="col-sm-4">
+	    {{ form_widget(form.categories) }}
+	  </div>
+	</div>
+
+	<div class="form-group">
+	  {{ form_label(form.published, "Autoriser la publication", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	  {{ form_errors(form.published) }}
+	  <div class="col-sm-4">
+	    {{ form_widget(form.published) }}
+	  </div>
+	</div>
+
+
+	{{ form_widget(form.save, {'attr': {'class': 'btn btn-primary'}, 'label' : 'Sauvegarder'}) }}
+
+		{{ form_rest(form) }}
+
+	{# Fermeture de la balise <form> du formulaire HTML #}
+	{{ form_end(form) }}
+</div>
+
+
+{% endblock %}
+

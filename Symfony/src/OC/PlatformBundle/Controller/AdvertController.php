@@ -8,6 +8,7 @@ use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
 use OC\PlatformBundle\Entity\AdvertSkill;
+use OC\PlatformBundle\Form\AdvertType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -67,20 +68,23 @@ class AdvertController extends Controller
     
     public function addAction(Request $request) {
         
-        // La gestion d'un formulaire est particulière, mais l'idée est la suivante :
-        
-        if ($request->isMethod('POST')) {
-            
-            // Ici, on s'occupera de la création et de la gestion du formulaire
-            
-            $request->getSession()->getFlashBag()->add('info', 'Annonce bien enregistrée.');
-            
-            // Puis on redirige vers la page de visualisation de cet article
-            return $this->redirect($this->generateUrl('oc_platform_view', array('id' => 1)));
+        $advert = new Advert();
+
+        $form = $this->get('form.factory')->create(new AdvertType, $advert);
+
+        if ($form->handleRequest($request)->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($advert);
+            $em->flush();
+
+            $request->getSession()->getFlashBag()->add('notice', 'Annonce bien enregistrée.');
+
+            return $this->redirect($this->generateUrl('oc_platform_view', array('id' => $advert->getId())));
         }
-        
-        // Si on n'est pas en POST, alors on affiche le formulaire
-        return $this->render('OCPlatformBundle:Advert:add.html.twig');
+
+        return $this->render('OCPlatformBundle:Advert:add.html.twig', array(
+          'form' => $form->createView(),
+        ));
     }
     
     public function editAction($id) {
